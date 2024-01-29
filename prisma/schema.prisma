@@ -1,0 +1,176 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 1
+model users {
+  id              Int        @id @default(autoincrement())
+  full_name       String
+  username        String     @unique
+  email           String     @unique
+  password        String
+  otp             String?
+  is_verify       Boolean
+  age             Int?
+  date_birth      DateTime?
+  gender          Boolean?
+  phone_number    Int?
+  address         String?
+  photo_profile   String?
+  created_at      DateTime   @default(now())
+  updated_at      DateTime   @updatedAt
+  comment         comments[] @relation("UserCommented")
+  replied_comment comments?  @relation("OtherUser")
+  shop            shops?
+  carts           carts[]
+  orders          orders[]
+  ratings         ratings[]
+  roles           mst_roles  @relation(fields: [id_role], references: [id])
+  id_role         Int
+}
+
+// 2
+model shops {
+  id               Int            @id @default(autoincrement())
+  name             String
+  address          String
+  photo_profile    String?
+  opened_at        DateTime
+  closed_at        DateTime
+  operasional_desc String?
+  created_at       DateTime       @default(now())
+  updated_at       DateTime       @updatedAt
+  etalase          etalase[]
+  products         products[]
+  user             users          @relation(fields: [id_admin], references: [id])
+  id_admin         Int            @unique
+  type             mst_shop_types @relation(fields: [id_type], references: [id])
+  id_type          Int
+}
+
+// 3
+model products {
+  id                 Int               @id @default(autoincrement())
+  name               String
+  price              Int
+  cashback           Int?
+  cashback_total     Int?
+  sold               Int?
+  is_special_edition Boolean
+  images             String
+  created_at         DateTime          @default(now())
+  updated_at         DateTime          @updatedAt
+  product_details    product_details[]
+  comments           comments[]
+  ratings            ratings[]
+  shop               shops             @relation(fields: [id_shop], references: [id])
+  id_shop            Int
+  category           mst_categories    @relation(fields: [id_category], references: [id])
+  id_category        Int
+}
+
+// 4
+model product_details {
+  id          Int      @id @default(autoincrement())
+  description String
+  spec_name   String
+  spec        String
+  product     products @relation(fields: [id_product], references: [id])
+  id_product  Int
+}
+
+// 5
+model carts {
+  id             Int      @id @default(autoincrement())
+  product_name   String
+  product_detail String
+  total          Int
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  user           users    @relation(fields: [id_user], references: [id])
+  id_user        Int
+}
+
+// 6
+model orders {
+  id             Int              @id @default(autoincrement())
+  product_name   String
+  product_detail String
+  quantity       Int
+  price          BigInt
+  total          BigInt
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @updatedAt
+  order_status   mst_order_status @relation(fields: [id_status], references: [id])
+  id_status      Int
+  user           users            @relation(fields: [id_user], references: [id])
+  id_user        Int
+}
+
+// 7
+model comments {
+  id            Int      @id @default(autoincrement())
+  commnet       String
+  images        String?
+  user          users    @relation("UserCommented", fields: [id_user], references: [id])
+  id_user       Int
+  other_user    users?   @relation("OtherUser", fields: [id_other_user], references: [id])
+  id_other_user Int?     @unique
+  product       products @relation(fields: [id_product], references: [id])
+  id_product    Int
+}
+
+// 8
+model etalase {
+  id           Int    @id @default(autoincrement())
+  etalase_name String
+  shop         shops  @relation(fields: [id_shop], references: [id])
+  id_shop      Int
+}
+
+// 9
+model ratings {
+  id         Int      @id @default(autoincrement())
+  rate       Int
+  product    products @relation(fields: [id_product], references: [id])
+  id_product Int
+  user       users    @relation(fields: [id_user], references: [id])
+  id_user    Int
+}
+
+// 10
+model mst_order_status {
+  id          Int      @id @default(autoincrement())
+  status_name String
+  orders      orders[]
+}
+
+// 11
+model mst_roles {
+  id        Int     @id @default(autoincrement())
+  role_name String
+  users     users[]
+}
+
+// 12
+model mst_shop_types {
+  id          Int     @id @default(autoincrement())
+  type_name   String
+  max_product Int
+  shop        shops[]
+}
+
+// 13
+model mst_categories {
+  id            Int        @id @default(autoincrement())
+  category_name String
+  products      products[]
+}

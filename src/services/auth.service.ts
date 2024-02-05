@@ -21,11 +21,11 @@ export function registerService(user: IAuth): Promise<IAuth> {
    })
 }
 
-export function resendOTP(otp: string, email: string): Promise<IAuth> {
+export function resendOTP(otp: string, email: string, id: number): Promise<IAuth> {
    sendEmail(email, otp)
    return DB.users.update({
       where: {
-         email
+         id
       },
       data: {
          is_verify: false,

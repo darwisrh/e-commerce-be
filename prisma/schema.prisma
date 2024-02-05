@@ -43,8 +43,6 @@ model shops {
   name             String
   address          String
   photo_profile    String?
-  opened_at        DateTime
-  closed_at        DateTime
   operasional_desc String?
   created_at       DateTime       @default(now())
   updated_at       DateTime       @updatedAt
@@ -60,9 +58,9 @@ model shops {
 model products {
   id                 Int               @id @default(autoincrement())
   name               String
-  price              Int
-  cashback           Int?
-  cashback_total     Int?
+  price              BigInt
+  cashback           BigInt?
+  cashback_total     BigInt?
   sold               Int?
   is_special_edition Boolean
   images             String
@@ -101,21 +99,30 @@ model carts {
 
 // 6
 model orders {
-  id             Int              @id @default(autoincrement())
-  product_name   String
-  product_detail String
-  quantity       Int
-  price          BigInt
-  total          BigInt
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @updatedAt
-  order_status   mst_order_status @relation(fields: [id_status], references: [id])
-  id_status      Int
-  user           users            @relation(fields: [id_user], references: [id])
-  id_user        Int
+  id           Int              @id @default(autoincrement())
+  quantity     Int
+  total        BigInt
+  created_at   DateTime         @default(now())
+  updated_at   DateTime         @updatedAt
+  orders       order_details[]
+  order_status mst_order_status @relation(fields: [id_status], references: [id])
+  id_status    Int
+  user         users            @relation(fields: [id_user], references: [id])
+  id_user      Int
 }
 
 // 7
+model order_details {
+  id             Int    @id @default(autoincrement())
+  uuid           String @unique
+  product_name   String
+  product_detail String
+  price          BigInt
+  order          orders @relation(fields: [id_order], references: [id])
+  id_order       Int
+}
+
+// 8
 model comments {
   id            Int      @id @default(autoincrement())
   commnet       String
@@ -128,7 +135,7 @@ model comments {
   id_product    Int
 }
 
-// 8
+// 9
 model etalase {
   id           Int    @id @default(autoincrement())
   etalase_name String
@@ -136,7 +143,7 @@ model etalase {
   id_shop      Int
 }
 
-// 9
+// 10
 model ratings {
   id         Int      @id @default(autoincrement())
   rate       Int
@@ -146,21 +153,21 @@ model ratings {
   id_user    Int
 }
 
-// 10
+// 11
 model mst_order_status {
   id          Int      @id @default(autoincrement())
   status_name String
   orders      orders[]
 }
 
-// 11
+// 12
 model mst_roles {
   id        Int     @id @default(autoincrement())
   role_name String
   users     users[]
 }
 
-// 12
+// 13
 model mst_shop_types {
   id          Int     @id @default(autoincrement())
   type_name   String
@@ -168,7 +175,7 @@ model mst_shop_types {
   shop        shops[]
 }
 
-// 13
+// 14
 model mst_categories {
   id            Int        @id @default(autoincrement())
   category_name String

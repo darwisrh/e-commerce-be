@@ -14,10 +14,14 @@ app.use("/uploads", express.static("uploads"))
 // ROUTES
 import { authRoutes } from "./src/routes/auth.routes"
 import { userRoutes } from "./src/routes/user.routes"
+import { shopRoutes } from "./src/routes/shop.routes"
+import { prodRoutes } from "./src/routes/product.routes"
 
 // Use Routes
 app.use("/r/auth", authRoutes)
 app.use("/r/user", userRoutes)
+app.use("/r/shop", shopRoutes)
+app.use("/r/product", prodRoutes)
 
 app.listen(port, () => {
    console.log(`Server run at : http://localhost:${port}`)

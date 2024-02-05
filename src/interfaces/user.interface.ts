@@ -9,6 +9,7 @@ export interface IUser {
    phone_number: number | null
    address: string | null
    photo_profile: string | null
+   is_verify: boolean
    created_at: Date
    updated_at: Date
 }

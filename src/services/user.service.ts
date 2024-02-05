@@ -17,6 +17,7 @@ export function getOneUserService(id: number): Promise<IUser | null> {
          phone_number: true,
          address: true,
          photo_profile: true,
+         is_verify: true,
          created_at: true,
          updated_at: true,
          roles: {
@@ -47,6 +48,7 @@ export function getAllUserService(): Promise<IUser[]> {
          phone_number: true,
          address: true,
          photo_profile: true,
+         is_verify: true,
          created_at: true,
          updated_at: true
       }

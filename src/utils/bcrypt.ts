@@ -1,6 +1,6 @@
 import { genSaltSync, compareSync, hashSync } from "bcrypt"
 
-export function hashPassword(password: string): string {
+export function encrypt(password: string): string {
    const salt = genSaltSync(10)
    return hashSync(password, salt)
 }

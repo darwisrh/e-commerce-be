@@ -82,10 +82,7 @@ CREATE TABLE "carts" (
 -- CreateTable
 CREATE TABLE "orders" (
     "id" SERIAL NOT NULL,
-    "product_name" TEXT NOT NULL,
-    "product_detail" TEXT NOT NULL,
     "quantity" INTEGER NOT NULL,
-    "price" BIGINT NOT NULL,
     "total" BIGINT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -93,6 +90,18 @@ CREATE TABLE "orders" (
     "id_user" INTEGER NOT NULL,
 
     CONSTRAINT "orders_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "order_details" (
+    "id" SERIAL NOT NULL,
+    "uuid" TEXT NOT NULL,
+    "product_name" TEXT NOT NULL,
+    "product_detail" TEXT NOT NULL,
+    "price" BIGINT NOT NULL,
+    "id_order" INTEGER NOT NULL,
+
+    CONSTRAINT "order_details_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -169,6 +178,9 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 CREATE UNIQUE INDEX "shops_id_admin_key" ON "shops"("id_admin");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "order_details_uuid_key" ON "order_details"("uuid");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "comments_id_other_user_key" ON "comments"("id_other_user");
 
 -- AddForeignKey
@@ -197,6 +209,9 @@ ALTER TABLE "orders" ADD CONSTRAINT "orders_id_status_fkey" FOREIGN KEY ("id_sta
 
 -- AddForeignKey
 ALTER TABLE "orders" ADD CONSTRAINT "orders_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "order_details" ADD CONSTRAINT "order_details_id_order_fkey" FOREIGN KEY ("id_order") REFERENCES "orders"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "comments" ADD CONSTRAINT "comments_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

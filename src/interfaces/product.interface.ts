@@ -1,8 +1,9 @@
 export interface IProduct {
+   id: number
    name: string
-   price: number
-   cashback: number | null
-   cashback_total: number | null
+   price: bigint
+   cashback: bigint | null
+   cashback_total: bigint | null
    sold: number | null
    is_special_edition: boolean
    images: string
@@ -11,6 +12,7 @@ export interface IProduct {
 }
 
 export interface IProductDetail {
+   id: number
    description: string
    spec_name: string
    spec: string

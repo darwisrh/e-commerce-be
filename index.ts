@@ -16,12 +16,14 @@ import { authRoutes } from "./src/routes/auth.routes"
 import { userRoutes } from "./src/routes/user.routes"
 import { shopRoutes } from "./src/routes/shop.routes"
 import { prodRoutes } from "./src/routes/product.routes"
+import { cartRoutes } from "./src/routes/cart.routes"
 
 // Use Routes
 app.use("/r/auth", authRoutes)
 app.use("/r/user", userRoutes)
 app.use("/r/shop", shopRoutes)
 app.use("/r/product", prodRoutes)
+app.use("/r/cart", cartRoutes)
 
 app.listen(port, () => {
    console.log(`Server run at : http://localhost:${port}`)

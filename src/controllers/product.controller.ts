@@ -118,9 +118,15 @@ export async function getAllProducts(_: Request, res: Response, next: NextFuncti
    try {
       const products: IProduct[] = await getAllProductsService()
       res.status(200).send({
-         data: {
-            products
-         }
+         data: products.map(product => {
+            return {
+               ...product,
+               price: String(product.price),
+               cashback: String(product.cashback),
+               cashback_total: String(product.cashback_total),
+               images: JSON.parse(product.images)
+            }
+         })
       })
    } catch (error) {
       next(error)
@@ -138,12 +144,15 @@ export async function getOneProducts(req: Request, res: Response, next: NextFunc
             message: "Product not found"
          })
       } else {
-         const price = Number(product.price)
-         const cashback = Number(product.cashback)
-         const cashbackTotal = Number(product.cashback_total)
+         const price: number = Number(product.price)
+         const cashback: number = Number(product.cashback)
+         const cashback_total: number = Number(product.cashback_total)
          res.status(200).send({
             data: {
-               product
+               ...product,
+               price,
+               cashback,
+               cashback_total
             }
          })
       }

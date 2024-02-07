@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express"
 import { ICart } from "../interfaces/cart.interface"
-import { createCartService } from "../services/cart.service"
+import { createCartService, getAllCartsService, getOneCartService } from "../services/cart.service"
 import { getOneProductService } from "../services/product.service"
 import * as joi from "joi"
 import { IProduct } from "../interfaces/product.interface"
@@ -48,6 +48,46 @@ export async function createCart(req: Request, res: Response, next: NextFunction
          total: productPrice * quantityBigint
       }
       await createCartService(cartContainer)
+   } catch (error) {
+      next(error)
+   }
+}
+
+export async function getOneCart(req: Request, res: Response, next: NextFunction): Promise<Response | undefined> {
+   try {
+      const { id } = req.params
+      const idNumber: number = Number(id)
+
+      const cart: ICart | null = await getOneCartService(idNumber)
+      if (!cart) {
+         return res.send({
+            message: "Cart not found"
+         })
+      } else {
+         const total: number = Number(cart.total)
+         res.status(200).send({
+            data: {
+               ...cart,
+               total
+            }
+         })
+      }
+   } catch (error) {
+      next(error)
+   }
+}
+
+export async function getAllCarts(_: Request, res: Response, next: NextFunction): Promise<void> {
+   try {
+      const carts: ICart[] = await getAllCartsService()
+      res.status(200).send({
+         data: carts.map(cart => {
+            return {
+               ...carts,
+               total: Number(cart.total)
+            }
+         })
+      })
    } catch (error) {
       next(error)
    }

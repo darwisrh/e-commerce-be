@@ -126,7 +126,7 @@ model order_details {
 // 8
 model comments {
   id            Int      @id @default(autoincrement())
-  commnet       String
+  comment       String
   images        String?
   user          users    @relation("UserCommented", fields: [id_user], references: [id], onDelete: Cascade)
   id_user       Int

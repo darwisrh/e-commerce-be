@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express"
 import { IProduct, IProductDetail } from "../interfaces/product.interface"
-import { createProductService, createProdDetailService, getAllProductsService, getOneProductService, updateProdDetailService } from "../services/product.service"
+import { createProductService, createProdDetailService, getAllProductsService, getOneProductService, updateProdDetailService, deleteOneProductService } from "../services/product.service"
 import * as joi from "joi"
 
 interface ValError {
@@ -186,6 +186,20 @@ export async function updateProdDetail(req: Request, res: Response, next: NextFu
       await updateProdDetailService(requestData, idNumber)
       res.status(200).send({
          message: "Success update product detail"
+      })
+   } catch (error) {
+      next(error)
+   }
+}
+
+export async function deleteOneProduct(req: Request, res: Response, next: NextFunction): Promise<void> {
+   try {
+      const { id } = req.params
+      const idNumber: number = Number(id)
+
+      await deleteOneProductService(idNumber)
+      res.status(200).send({
+         message: "Success delete product"
       })
    } catch (error) {
       next(error)

@@ -5,8 +5,11 @@ import { Express } from "express"
 import { auth } from "../middlewares/auth"
 
 // CONTROLLERS
-import { createCart } from "../controllers/cart.contoller"
+import { createCart, getAllCarts, getOneCart, deleteOneCart } from "../controllers/cart.contoller"
 
 export const cartRoutes: Express = express()
 
 cartRoutes.post("/create-cart", auth, createCart)
+cartRoutes.get("/get-all-carts", auth, getAllCarts)
+cartRoutes.get("/get-one-cart/:id", auth, getOneCart)
+cartRoutes.delete("/delete-cart/:id", auth, deleteOneCart)

@@ -48,7 +48,7 @@ model shops {
   updated_at       DateTime       @updatedAt
   etalase          etalase[]
   products         products[]
-  user             users          @relation(fields: [id_admin], references: [id])
+  user             users          @relation(fields: [id_admin], references: [id], onDelete: Cascade)
   id_admin         Int            @unique
   type             mst_shop_types @relation(fields: [id_type], references: [id])
   id_type          Int
@@ -81,7 +81,7 @@ model product_details {
   description String
   spec_name   String
   spec        String
-  product     products @relation(fields: [id_product], references: [id])
+  product     products @relation(fields: [id_product], references: [id], onDelete: Cascade)
   id_product  Int
 }
 
@@ -94,7 +94,7 @@ model carts {
   total          BigInt
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
-  user           users    @relation(fields: [id_user], references: [id])
+  user           users    @relation(fields: [id_user], references: [id], onDelete: Cascade)
   id_user        Int
 }
 
@@ -108,7 +108,7 @@ model orders {
   orders       order_details[]
   order_status mst_order_status @relation(fields: [id_status], references: [id])
   id_status    Int
-  user         users            @relation(fields: [id_user], references: [id])
+  user         users            @relation(fields: [id_user], references: [id], onDelete: Cascade)
   id_user      Int
 }
 
@@ -119,18 +119,18 @@ model order_details {
   product_name   String
   product_detail String
   price          BigInt
-  order          orders @relation(fields: [id_order], references: [id])
+  order          orders @relation(fields: [id_order], references: [id], onDelete: Cascade)
   id_order       Int
 }
 
 // 8
 model comments {
   id            Int      @id @default(autoincrement())
-  commnet       String
+  comment       String
   images        String?
-  user          users    @relation("UserCommented", fields: [id_user], references: [id])
+  user          users    @relation("UserCommented", fields: [id_user], references: [id], onDelete: Cascade)
   id_user       Int
-  other_user    users?   @relation("OtherUser", fields: [id_other_user], references: [id])
+  other_user    users?   @relation("OtherUser", fields: [id_other_user], references: [id], onDelete: Cascade)
   id_other_user Int?     @unique
   product       products @relation(fields: [id_product], references: [id])
   id_product    Int
@@ -140,7 +140,7 @@ model comments {
 model etalase {
   id           Int    @id @default(autoincrement())
   etalase_name String
-  shop         shops  @relation(fields: [id_shop], references: [id])
+  shop         shops  @relation(fields: [id_shop], references: [id], onDelete: Cascade)
   id_shop      Int
 }
 
@@ -148,9 +148,9 @@ model etalase {
 model ratings {
   id         Int      @id @default(autoincrement())
   rate       Int
-  product    products @relation(fields: [id_product], references: [id])
+  product    products @relation(fields: [id_product], references: [id], onDelete: Cascade)
   id_product Int
-  user       users    @relation(fields: [id_user], references: [id])
+  user       users    @relation(fields: [id_user], references: [id], onDelete: Cascade)
   id_user    Int
 }
 

@@ -83,3 +83,11 @@ export function getOneProductService(id: number): Promise<IProduct | null> {
       }
    })
 }
+
+export function deleteOneProductService(id: number): Promise<IProduct> {
+   return DB.products.delete({
+      where: {
+         id
+      }
+   })
+}

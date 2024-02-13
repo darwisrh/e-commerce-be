@@ -22,7 +22,7 @@ model users {
   age             Int?
   date_birth      DateTime?
   gender          Boolean?
-  phone_number    Int?
+  phone_number    String?
   address         String?
   photo_profile   String?
   created_at      DateTime   @default(now())

@@ -9,7 +9,21 @@ export function createProductService(product: Omit<IProduct, "id">): Promise<IPr
 
 export function createProdDetailService(prodDetail: Omit<IProductDetail, "id">): Promise<IProductDetail> {
    return DB.product_details.create({
-      data: prodDetail
+      data: prodDetail,
+      select: {
+         id: true,
+         description: true,
+         spec: true,
+         spec_name: true,
+         id_product: true,
+         product: {
+            select: {
+               id: true,
+               name: true,
+               price: true
+            }
+         }
+      }
    })
 }
 

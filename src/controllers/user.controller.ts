@@ -85,7 +85,7 @@ export async function updateUser(req: any, res: Response, next: NextFunction): P
       const newDataContainer: IUser = {
          ...newData,
          photo_profile: `http://localhost:${port}/${photoProfile}`,
-         phone_number: Number(newData.phone_number),
+         phone_number: newData.phone_number,
          gender: Boolean(newData.gender),
          date_birth: new Date(date_birth),
          age: Number(newData.age)

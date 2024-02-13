@@ -26,8 +26,6 @@ CREATE TABLE "shops" (
     "name" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "photo_profile" TEXT,
-    "opened_at" TIMESTAMP(3) NOT NULL,
-    "closed_at" TIMESTAMP(3) NOT NULL,
     "operasional_desc" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -41,9 +39,9 @@ CREATE TABLE "shops" (
 CREATE TABLE "products" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "price" INTEGER NOT NULL,
-    "cashback" INTEGER,
-    "cashback_total" INTEGER,
+    "price" BIGINT NOT NULL,
+    "cashback" BIGINT,
+    "cashback_total" BIGINT,
     "sold" INTEGER,
     "is_special_edition" BOOLEAN NOT NULL,
     "images" TEXT NOT NULL,
@@ -71,7 +69,8 @@ CREATE TABLE "carts" (
     "id" SERIAL NOT NULL,
     "product_name" TEXT NOT NULL,
     "product_detail" TEXT NOT NULL,
-    "total" INTEGER NOT NULL,
+    "quantity" INTEGER NOT NULL,
+    "total" BIGINT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "id_user" INTEGER NOT NULL,
@@ -107,7 +106,7 @@ CREATE TABLE "order_details" (
 -- CreateTable
 CREATE TABLE "comments" (
     "id" SERIAL NOT NULL,
-    "commnet" TEXT NOT NULL,
+    "comment" TEXT NOT NULL,
     "images" TEXT,
     "id_user" INTEGER NOT NULL,
     "id_other_user" INTEGER,
@@ -187,7 +186,7 @@ CREATE UNIQUE INDEX "comments_id_other_user_key" ON "comments"("id_other_user");
 ALTER TABLE "users" ADD CONSTRAINT "users_id_role_fkey" FOREIGN KEY ("id_role") REFERENCES "mst_roles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "shops" ADD CONSTRAINT "shops_id_admin_fkey" FOREIGN KEY ("id_admin") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "shops" ADD CONSTRAINT "shops_id_admin_fkey" FOREIGN KEY ("id_admin") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "shops" ADD CONSTRAINT "shops_id_type_fkey" FOREIGN KEY ("id_type") REFERENCES "mst_shop_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -199,34 +198,34 @@ ALTER TABLE "products" ADD CONSTRAINT "products_id_shop_fkey" FOREIGN KEY ("id_s
 ALTER TABLE "products" ADD CONSTRAINT "products_id_category_fkey" FOREIGN KEY ("id_category") REFERENCES "mst_categories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "product_details" ADD CONSTRAINT "product_details_id_product_fkey" FOREIGN KEY ("id_product") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "product_details" ADD CONSTRAINT "product_details_id_product_fkey" FOREIGN KEY ("id_product") REFERENCES "products"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carts" ADD CONSTRAINT "carts_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "carts" ADD CONSTRAINT "carts_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "orders" ADD CONSTRAINT "orders_id_status_fkey" FOREIGN KEY ("id_status") REFERENCES "mst_order_status"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "orders" ADD CONSTRAINT "orders_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "orders" ADD CONSTRAINT "orders_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "order_details" ADD CONSTRAINT "order_details_id_order_fkey" FOREIGN KEY ("id_order") REFERENCES "orders"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "order_details" ADD CONSTRAINT "order_details_id_order_fkey" FOREIGN KEY ("id_order") REFERENCES "orders"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "comments" ADD CONSTRAINT "comments_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "comments" ADD CONSTRAINT "comments_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "comments" ADD CONSTRAINT "comments_id_other_user_fkey" FOREIGN KEY ("id_other_user") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "comments" ADD CONSTRAINT "comments_id_other_user_fkey" FOREIGN KEY ("id_other_user") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "comments" ADD CONSTRAINT "comments_id_product_fkey" FOREIGN KEY ("id_product") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "etalase" ADD CONSTRAINT "etalase_id_shop_fkey" FOREIGN KEY ("id_shop") REFERENCES "shops"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "etalase" ADD CONSTRAINT "etalase_id_shop_fkey" FOREIGN KEY ("id_shop") REFERENCES "shops"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ratings" ADD CONSTRAINT "ratings_id_product_fkey" FOREIGN KEY ("id_product") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ratings" ADD CONSTRAINT "ratings_id_product_fkey" FOREIGN KEY ("id_product") REFERENCES "products"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ratings" ADD CONSTRAINT "ratings_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ratings" ADD CONSTRAINT "ratings_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

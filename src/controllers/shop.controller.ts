@@ -72,8 +72,8 @@ export async function createShop(req: any, res: Response, next: NextFunction): P
 
 export async function updateShop(req: any, res: Response, next: NextFunction): Promise<Response | undefined> {
    const shceme: ObjectSchema<IShop> = joi.object({
-      name: joi.string().required(),
-      address: joi.string().required(),
+      name: joi.string(),
+      address: joi.string(),
       photo_profile: joi.string(),
       operasional_desc: joi.string()
    })

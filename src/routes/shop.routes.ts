@@ -13,5 +13,5 @@ export const shopRoutes: Express = express()
 
 shopRoutes.post("/create-shop", auth, uploadImage("photo_profile"), createShop)
 shopRoutes.patch("/update-shop/:id", auth, uploadImage("photo_profile"), updateShop)
-shopRoutes.get("/get-all-shops", auth, getAllShops)
+shopRoutes.get("/get-all-shops", getAllShops)
 shopRoutes.get("/get-one-shop/:id", auth, getOneShop)

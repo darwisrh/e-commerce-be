@@ -17,6 +17,8 @@ import { userRoutes } from "./src/routes/user.routes"
 import { shopRoutes } from "./src/routes/shop.routes"
 import { prodRoutes } from "./src/routes/product.routes"
 import { cartRoutes } from "./src/routes/cart.routes"
+import { commRoutes } from "./src/routes/comment.routes"
+import { rateRoutes } from "./src/routes/rating.routes"
 
 // Use Routes
 app.use("/r/auth", authRoutes)
@@ -24,6 +26,8 @@ app.use("/r/user", userRoutes)
 app.use("/r/shop", shopRoutes)
 app.use("/r/product", prodRoutes)
 app.use("/r/cart", cartRoutes)
+app.use("/r/comment", commRoutes)
+app.use("/r/rate", rateRoutes)
 
 app.listen(port, () => {
    console.log(`Server run at : http://localhost:${port}`)

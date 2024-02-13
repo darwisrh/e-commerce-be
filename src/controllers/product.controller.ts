@@ -73,15 +73,16 @@ export async function createProduct(req: any, res: Response, next: NextFunction)
    }
 }
 
-export async function createProductDetail(req: any, res: Response, next: NextFunction): Promise<Response | undefined> {
-   const scheme: joi.ObjectSchema<IProductDetail> = joi.object({
+export async function createProdDetail(req: Request, res: Response, next: NextFunction): Promise<Response | undefined> {
+   const productScheme: joi.ObjectSchema<IProductDetail> = joi.object({
       description: joi.string().required(),
-      spec: joi.string().required(),
       spec_name: joi.string().required(),
-      id_product: joi.number().required()
+      spec: joi.string().required(),
+      id_product: joi.number().required(),
+      user: joi.object()
    })
 
-   const { error }: ValError = scheme.validate(req.body)
+   const { error }: ValError = productScheme.validate(req.body)
 
    if (error) {
       return res.send({
@@ -93,21 +94,9 @@ export async function createProductDetail(req: any, res: Response, next: NextFun
 
    try {
       const requestData: IProductDetail = req.body
-
-      const product: IProduct | null = await getOneProductService(requestData.id_product)
-      if (!product) {
-         return res.send({
-            message: "Product not found"
-         })
-      }
-
-      const prodDetailContainer: IProductDetail = {
-         ...requestData,
-         id_product: product.id
-      }
-      await createProdDetailService(prodDetailContainer)
+      await createProdDetailService(requestData)
       res.status(200).send({
-         message: "Success create product detail!"
+         message: "Successfully create product detail"
       })
    } catch (error) {
       next(error)
@@ -147,12 +136,14 @@ export async function getOneProducts(req: Request, res: Response, next: NextFunc
          const price: number = Number(product.price)
          const cashback: number = Number(product.cashback)
          const cashback_total: number = Number(product.cashback_total)
+         const images: object[] = JSON.parse(product.images)
          res.status(200).send({
             data: {
                ...product,
                price,
                cashback,
-               cashback_total
+               cashback_total,
+               images
             }
          })
       }

@@ -8,6 +8,6 @@ import { register, resendOtp, verifyEmail, login } from "../controllers/auth.con
 export const authRoutes: Express = express()
 
 authRoutes.post("/register", register)
-authRoutes.patch("/resend-otp/:id", resendOtp)
+authRoutes.patch("/resend-otp", resendOtp)
 authRoutes.patch("/verify-email", verifyEmail)
 authRoutes.post("/login", login)

@@ -6,7 +6,7 @@ export interface IUser {
    age: number | null
    date_birth: Date | null
    gender: boolean | null
-   phone_number: number | null
+   phone_number: string | null
    address: string | null
    photo_profile: string | null
    is_verify: boolean

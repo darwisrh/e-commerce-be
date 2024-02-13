@@ -1,19 +1,17 @@
 import {
    registerService,
    getUserByEmail,
-   getUserById,
    resendOTP,
    expiredOTP,
    verifyEmailService
 } from "../services/auth.service"
-// import { compare } from "bcrypt"
 import { ObjectSchema, ValidationError } from "joi"
 import * as joi from "joi"
 import { IAuth } from "../interfaces/auth.interface"
 import { Request, Response, NextFunction } from "express"
 import { OTPGenerator } from "../utils/send-email"
-import { compare } from "bcrypt"
 import * as jwt from "jsonwebtoken"
+import { compare } from "../utils/bcrypt"
 
 interface ValError {
    error: ValidationError | undefined
@@ -77,11 +75,9 @@ export async function resendOtp(req: Request, res: Response, next: NextFunction)
 
    try {
       const { email }: IAuth = req.body
-      const { id } = req.params
-      const idNumber: number = Number(id)
       const otpCode: string = OTPGenerator().toUpperCase()
 
-      const user: IAuth | null = await getUserById(idNumber)
+      const user: IAuth | null = await getUserByEmail(email)
       if (!user) {
          return res.status(400).send({
             message: "User not found"
@@ -95,7 +91,7 @@ export async function resendOtp(req: Request, res: Response, next: NextFunction)
             message: "Wait for 1 minute before resend OTP!!"
          })
       } else {
-         await resendOTP(otpCode, email, idNumber)
+         await resendOTP(otpCode, email)
          res.status(200).send({
             message: "Check your email to get OTP code"
          })
@@ -194,9 +190,9 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
          full_name: user.full_name,
          email: user.email
       }
-      const secretKey: string = process.env.SECRET_KEY || "secret"
 
-      const isPassword: Promise<boolean> = compare(password, user.password)
+      const secretKey: string = process.env.SECRET_KEY || "secret"
+      const isPassword: boolean = compare(password, user.password)
       if (!isPassword) {
          return res.send({
             message: "Password incorrect"

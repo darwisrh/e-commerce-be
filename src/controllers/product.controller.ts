@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express"
-import { IProduct, IProductDetail } from "../interfaces/product.interface"
-import { createProductService, createProdDetailService, getAllProductsService, getOneProductService, updateProdDetailService, deleteOneProductService } from "../services/product.service"
+import { IProduct } from "../interfaces/product.interface"
+import { createProductService, getAllProductsService, getOneProductService, deleteOneProductService } from "../services/product.service"
 import * as joi from "joi"
 
 interface ValError {
@@ -73,36 +73,6 @@ export async function createProduct(req: any, res: Response, next: NextFunction)
    }
 }
 
-export async function createProdDetail(req: Request, res: Response, next: NextFunction): Promise<Response | undefined> {
-   const productScheme: joi.ObjectSchema<IProductDetail> = joi.object({
-      description: joi.string().required(),
-      spec_name: joi.string().required(),
-      spec: joi.string().required(),
-      id_product: joi.number().required(),
-      user: joi.object()
-   })
-
-   const { error }: ValError = productScheme.validate(req.body)
-
-   if (error) {
-      return res.send({
-         error: {
-            message: error.details[0].message
-         }
-      })
-   }
-
-   try {
-      const requestData: IProductDetail = req.body
-      await createProdDetailService(requestData)
-      res.status(200).send({
-         message: "Successfully create product detail"
-      })
-   } catch (error) {
-      next(error)
-   }
-}
-
 export async function getAllProducts(_: Request, res: Response, next: NextFunction): Promise<void> {
    try {
       const products: IProduct[] = await getAllProductsService()
@@ -147,37 +117,6 @@ export async function getOneProducts(req: Request, res: Response, next: NextFunc
             }
          })
       }
-   } catch (error) {
-      next(error)
-   }
-}
-
-export async function updateProdDetail(req: Request, res: Response, next: NextFunction): Promise<Response | undefined> {
-   const scheme: joi.ObjectSchema<IProductDetail> = joi.object({
-      description: joi.string().required(),
-      spec: joi.string().required(),
-      spec_name: joi.string().required()
-   })
-
-   const { error }: ValError = scheme.validate(req.body)
-
-   if (error) {
-      return res.send({
-         error: {
-            message: error.details[0].message
-         }
-      })
-   }
-
-   try {
-      const requestData: IProductDetail = req.body
-      const { id } = req.params
-      const idNumber: number = Number(id)
-
-      await updateProdDetailService(requestData, idNumber)
-      res.status(200).send({
-         message: "Success update product detail"
-      })
    } catch (error) {
       next(error)
    }

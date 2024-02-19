@@ -26,10 +26,9 @@ export async function createCart(req: Request, res: Response, next: NextFunction
    }
 
    try {
-      const { quantity, id_user, product_detail }: ICart = req.body
+      const { quantity, id_user }: ICart = req.body
       const { id } = req.params
       const idNumber: number = Number(id)
-
       const product: IProduct | null = await getOneProductService(idNumber)
       if (!product) {
          return res.send({
@@ -44,10 +43,13 @@ export async function createCart(req: Request, res: Response, next: NextFunction
          quantity: Number(quantity),
          id_user: Number(id_user),
          product_name: product.name,
-         product_detail,
+         product_detail: "testing",
          total: productPrice * quantityBigint
       }
       await createCartService(cartContainer)
+      res.status(200).send({
+         message: "Create cart successfully"
+      })
    } catch (error) {
       next(error)
    }

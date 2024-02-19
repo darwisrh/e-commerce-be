@@ -13,8 +13,7 @@ export function auth(req: Request, res: Response, next: NextFunction): Response 
 
    try {
       const secret: string = process.env.SECRET_KEY || "secret"
-      const verified = jwt.verify(token, secret)
-      req.body.user = verified
+      jwt.verify(token, secret)
       next()
    } catch (error) {
       next(error)

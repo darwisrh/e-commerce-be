@@ -12,7 +12,10 @@ const port: string = process.env.PORT || "3000"
 export async function createComment(req: any, res: Response, next: NextFunction): Promise<Response | undefined> {
    const scheme: joi.ObjectSchema<IComment> = joi.object({
       comment: joi.string().required(),
-      images: joi.string()
+      images: joi.string(),
+      id_product: joi.string().required(),
+      id_user: joi.string().required(),
+      id_other_user: joi.string()
    })
 
    const { error }: ValErr = scheme.validate(req.body)
@@ -37,7 +40,7 @@ export async function createComment(req: any, res: Response, next: NextFunction)
 
       const requestContainer: Omit<IComment, "id"> = {
          comment,
-         images: JSON.stringify(imgContainer),
+         images: imgContainer ? JSON.stringify(imgContainer) : null,
          id_other_user: Number(id_other_user),
          id_product: Number(id_product),
          id_user: Number(id_user)

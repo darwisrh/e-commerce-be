@@ -35,7 +35,6 @@ export async function createCart(req: Request, res: Response, next: NextFunction
             message: "Product not found"
          })
       }
-
       const productPrice: bigint = product.price
       const quantityBigint: bigint = BigInt(quantity)
 
@@ -43,7 +42,6 @@ export async function createCart(req: Request, res: Response, next: NextFunction
          quantity: Number(quantity),
          id_user: Number(id_user),
          product_name: product.name,
-         product_detail: "testing",
          total: productPrice * quantityBigint
       }
       await createCartService(cartContainer)
@@ -85,7 +83,7 @@ export async function getAllCarts(_: Request, res: Response, next: NextFunction)
       res.status(200).send({
          data: carts.map(cart => {
             return {
-               ...carts,
+               ...cart,
                total: Number(cart.total)
             }
          })
@@ -95,10 +93,17 @@ export async function getAllCarts(_: Request, res: Response, next: NextFunction)
    }
 }
 
-export async function deleteOneCart(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function deleteOneCart(req: Request, res: Response, next: NextFunction): Promise<Response | undefined> {
    try {
       const { id } = req.params
       const idNumber: number = Number(id)
+
+      const cart: ICart | null = await getOneCartService(idNumber)
+      if (!cart) {
+         return res.status(400).send({
+            message: "Cart not found"
+         })
+      }
 
       await deleteCartService(idNumber)
       res.status(200).send({

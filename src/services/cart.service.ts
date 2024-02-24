@@ -20,7 +20,6 @@ export function getAllCartsService(): Promise<ICart[]> {
       select: {
          id: true,
          product_name: true,
-         product_detail: true,
          quantity: true,
          total: true,
          id_user: true
@@ -36,7 +35,6 @@ export function getOneCartService(id: number): Promise<ICart | null> {
       select: {
          id: true,
          product_name: true,
-         product_detail: true,
          quantity: true,
          total: true,
          id_user: true

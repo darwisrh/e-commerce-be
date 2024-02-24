@@ -28,7 +28,7 @@ model users {
   created_at      DateTime   @default(now())
   updated_at      DateTime   @updatedAt
   comment         comments[] @relation("UserCommented")
-  replied_comment comments?  @relation("OtherUser")
+  replied_comment comments[] @relation("OtherUser")
   shop            shops?
   carts           carts[]
   orders          orders[]
@@ -87,15 +87,14 @@ model product_details {
 
 // 5
 model carts {
-  id             Int      @id @default(autoincrement())
-  product_name   String
-  product_detail String
-  quantity       Int
-  total          BigInt
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
-  user           users    @relation(fields: [id_user], references: [id], onDelete: Cascade)
-  id_user        Int
+  id           Int      @id @default(autoincrement())
+  product_name String
+  quantity     Int
+  total        BigInt
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  user         users    @relation(fields: [id_user], references: [id], onDelete: Cascade)
+  id_user      Int
 }
 
 // 6
@@ -131,7 +130,7 @@ model comments {
   user          users    @relation("UserCommented", fields: [id_user], references: [id], onDelete: Cascade)
   id_user       Int
   other_user    users?   @relation("OtherUser", fields: [id_other_user], references: [id], onDelete: Cascade)
-  id_other_user Int?     @unique
+  id_other_user Int?
   product       products @relation(fields: [id_product], references: [id])
   id_product    Int
 }

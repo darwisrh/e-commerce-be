@@ -22,3 +22,27 @@ export function getAllCommentByIdProduct(id: number): Promise<IComment[]> {
       Prisma.sql`SELECT * FROM comments WHERE id_product = ${id}`
    )
 }
+
+export function getAllCommentByReply(): Promise<IComment[]> {
+   return DB.comments.findMany({
+      select: {
+         id: true,
+         comment: true,
+         images: true,
+         id_user: true,
+         id_other_user: true,
+         id_product: true,
+         other_user: true,
+         user: {
+            select: {
+               comment: {
+                  select: {
+                     images: true,
+                     comment: true
+                  }
+               }
+            }
+         }
+      }
+   })
+}

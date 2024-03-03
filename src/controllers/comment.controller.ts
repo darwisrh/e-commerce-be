@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import * as joi from "joi"
 import { IComment } from "../interfaces/comment.interface"
 import { createCommentService, editCommentService, getAllCommentByIdProduct } from "../services/comment.service"
+import { cloudUploadImage } from "../utils/cloudinary"
 
 interface ValErr {
    error: joi.ValidationError | undefined
@@ -30,13 +31,23 @@ export async function createComment(req: any, res: Response, next: NextFunction)
 
    try {
       const imgContainer: string[] = []
+      const cldImg: string[] = []
       const { comment, id_other_user, id_user, id_product }: IComment = req.body
       const images = req.files
 
       for (let i = 0; i < images.length; i++) {
          const path: string = `http://localhost:${port}/${images[i].path}`
+         const path2: string = `uploads/${images[i].filename}`
+         cldImg.push(path2)
          imgContainer.push(path)
       }
+
+      if (cldImg.length > 10) {
+         return res.send({
+            message: "The amount of the image is to big, please select less than 10 images!!"
+         })
+      }
+      cloudUploadImage(cldImg)
 
       const requestContainer: Omit<IComment, "id"> = {
          comment,

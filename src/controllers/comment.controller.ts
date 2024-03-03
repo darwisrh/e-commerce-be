@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import * as joi from "joi"
 import { IComment } from "../interfaces/comment.interface"
 import { createCommentService, editCommentService, getAllCommentByIdProduct } from "../services/comment.service"
-import { cloudUploadImage } from "../utils/couldinary"
+import { cloudUploadImage } from "../utils/cloudinary"
 
 interface ValErr {
    error: joi.ValidationError | undefined

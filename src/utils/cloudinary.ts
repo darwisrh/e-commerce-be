@@ -6,13 +6,22 @@ v2.config({
    api_secret: process.env.API_SECRET
 })
 
-export async function cloudUploadImage(img: string[]): Promise<void> {
+export async function cloudUploadImage(img: string[]): Promise<string[]> {
+   const imageUrlContainer: string[] = []
+
    img.map((img) => {
       v2.uploader.upload(img, { folder: "E-Commerce" }, (err, res) => {
          if (err) {
             throw err
          }
-         console.log("Success upload, result: " + res?.secure_url)
+
+         if (!res) {
+            throw err
+         }
+
+         console.log("Success upload, result: " + res.secure_url)
+         imageUrlContainer.push(res.secure_url)
       })
    })
+   return imageUrlContainer
 }

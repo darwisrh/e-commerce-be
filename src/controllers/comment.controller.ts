@@ -47,6 +47,8 @@ export async function createComment(req: any, res: Response, next: NextFunction)
             message: "The amount of the image is to big, please select less than 10 images!!"
          })
       }
+
+      // Upload to cloudinary
       cloudUploadImage(cldImg)
 
       const requestContainer: Omit<IComment, "id"> = {
